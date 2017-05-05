@@ -8,10 +8,12 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <math.h>
+#include <time.h>
 #include "calcSunTimes.h"
 
-// This prototype not necessary, but for the sake of following standard practice:
+// These prototypes are not necessary, but for the sake of following standard practice:
 static uint16_t getDayOfYear(uint16_t day, uint16_t month, uint16_t year);
+static int8_t getTZOffset(void);
 
 static uint16_t getDayOfYear(uint16_t day, uint16_t month, uint16_t year)
 {
@@ -19,6 +21,19 @@ static uint16_t getDayOfYear(uint16_t day, uint16_t month, uint16_t year)
 	int16_t    N2 = floor((month + 9) / 12);
 	int16_t    N3 = (1 + floor((year - 4 * floor(year / 4) + 2) / 3));
 	return N1 - (N2 * N3) + day - 30;
+}
+
+static int8_t getTZOffset(void)
+{
+  time_t t = time(NULL);
+  struct tm lt = {0};
+
+  localtime_r(&t, &lt);
+
+  //printf("Offset to GMT is %ld hours.\n", lt.tm_gmtoff/3600);
+  //printf("The time zone is '%s'.\n", lt.tm_zone);
+
+  return lt.tm_gmtoff/3600;
 }
 
 sSunTimes getRiseSetTimes(sSunCalcInputs sRiseSetInputs)
@@ -93,6 +108,8 @@ sSunTimes getRiseSetTimes(sSunCalcInputs sRiseSetInputs)
 	double utcSet = fmod(loc_tSet - lngHour, 24.0);
 
 	// Convert UTC value to local time zone of lat/long
+	offset = getTZOffset();
+	/*
 	if (((sRiseSetInputs.month > 3) && (sRiseSetInputs.month < 11)) ||
 			((sRiseSetInputs.month == 3) && (sRiseSetInputs.day > 12)) ||
 			((sRiseSetInputs.month == 11) && (sRiseSetInputs.day < 5)))
@@ -103,11 +120,27 @@ sSunTimes getRiseSetTimes(sSunCalcInputs sRiseSetInputs)
 	{
 		offset = 8.0;
 	}
-	double localT_Rise = utcRise - offset;
-	double localT_Set = utcSet - offset;
+	*/
+
+	double localT_Rise = utcRise + offset;		// Changed from "- offset" to "+ offset" since
+	double localT_Set = utcSet + offset;		// using offset obtained from system's local settings
+
 	if (localT_Set < 0)
 	{
 		localT_Set += 24.0;
+	}
+	else if (localT_Set > 24)
+	{
+		localT_Set -= 24.0;
+	}
+
+	if (localT_Rise < 0)
+	{
+		localT_Rise += 24.0;
+	}
+	else if (localT_Rise > 24)
+	{
+		localT_Rise -= 24.0;
 	}
 
 	//double hr_Rise;

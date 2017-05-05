@@ -12,7 +12,6 @@
 
 #include <stdio.h>
 #include <stdint.h>
-#include <math.h>
 #include "calcSunTimes.h"
 
 
@@ -27,15 +26,10 @@ int main(void)
 	double 		lng = -121.2358;
 	double 		zenith = 90.83;		// check on what is usually used
 
-//	uint16_t 	N = 0;
-//	double		tRise = 0.0;
-//	double		tSet = 0.0;
-
-	//double 		offset = 7.0;
-
 	sSunTimes riseSetTimes;
 	sSunCalcInputs riseSetInputs;
 
+	/*
 	for (month = 1; month < 13; ++month)
 	{
 		for (day = 1; day <= 31; ++day)
@@ -61,10 +55,14 @@ int main(void)
 					riseSetTimes.sunsetHour, riseSetTimes.sunsetMinute);
 		}
 	}
+	*/
 
 	riseSetInputs.month = 5;
 	riseSetInputs.year = 2017;
-	riseSetInputs.day = 5;
+	riseSetInputs.day = 6;
+	riseSetInputs.latitude	= lat;
+	riseSetInputs.longitude	= lng;
+	riseSetInputs.zenith	= zenith;
 
 	riseSetTimes = getRiseSetTimes(riseSetInputs);
 

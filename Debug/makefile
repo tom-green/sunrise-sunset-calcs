@@ -23,7 +23,10 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: calcSunriseSunset
+all: pre-build main-build
+
+# Main-build Target
+main-build: calcSunriseSunset
 
 # Tool invocations
 calcSunriseSunset: $(OBJS) $(USER_OBJS)
@@ -38,7 +41,11 @@ clean:
 	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) calcSunriseSunset
 	-@echo ' '
 
+pre-build:
+	-make clean
+	-@echo ' '
+
 .PHONY: all clean dependents
-.SECONDARY:
+.SECONDARY: main-build pre-build
 
 -include ../makefile.targets

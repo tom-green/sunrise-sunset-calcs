@@ -8,6 +8,8 @@
 #ifndef CALCSUNTIMES_H_
 #define CALCSUNTIMES_H_
 
+#include <stdint.h>
+
 typedef struct {
 	double sunriseHour;
 	double sunriseMinute;
