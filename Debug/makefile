@@ -26,19 +26,19 @@ endif
 all: pre-build main-build
 
 # Main-build Target
-main-build: calcSunriseSunset
+main-build: calcOpTimes
 
 # Tool invocations
-calcSunriseSunset: $(OBJS) $(USER_OBJS)
+calcOpTimes: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
-	@echo 'Invoking: GCC C Linker'
-	gcc -ftest-coverage -fprofile-arcs -o "calcSunriseSunset" $(OBJS) $(USER_OBJS) $(LIBS)
+	@echo 'Invoking: Cross GCC Linker'
+	arm-linux-gnueabihf-gcc -L/usr/include/arm-linux-gnueabihf -o "calcOpTimes" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) calcSunriseSunset
+	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) calcOpTimes
 	-@echo ' '
 
 pre-build:

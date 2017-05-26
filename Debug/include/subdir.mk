@@ -16,8 +16,8 @@ C_DEPS += \
 # Each subdirectory must supply rules for building sources it contributes
 include/%.o: ../include/%.c
 	@echo 'Building file: $<'
-	@echo 'Invoking: GCC C Compiler'
-	gcc -I"/home/thomas/workspace_neon/calcSunriseSunset/include" -O0 -g3 -ftest-coverage -fprofile-arcs -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	@echo 'Invoking: Cross GCC Compiler'
+	arm-linux-gnueabihf-gcc -I"/home/thomas/workspace_neon/calcOpTimes/include" -I/usr/include/arm-linux-gnueabihf -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
